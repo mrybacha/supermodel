@@ -5,7 +5,7 @@
     <cfinclude template="common.cfm" />
     <cfinvoke method="before" argumentcollection="#attributes#" />
 
-    <div class="date">
+    <div class="date" id="#attributes.id#_wrapper">
       <input id="#attributes.id#" name="#attributes.id#" type="hidden" value="#lsDateFormat(request.data_object[attributes.id], 'yyyy-mm-dd')#" />
       <input id="#attributes.id#_dd" class="day" type="text" maxlength="2" />
       <input id="#attributes.id#_mm" class="month" type="text" maxlength="2" />
