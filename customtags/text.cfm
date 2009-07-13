@@ -4,6 +4,7 @@
 <cfelse>
   <cfset value = request.data_object[_id] />
 </cfif>
+<cfparam name="attributes.class" default="" />
 
 <cfoutput>
 
@@ -11,7 +12,7 @@
   <cfcase value="start">
     <cfinclude template="common.cfm" />
     <cfinvoke method="before" argumentcollection="#attributes#" />
-    <input type="text" value="#value#" #thistag.attributes.string()# />
+    <input class="#attributes.class#" value="#value#" #thistag.attributes.string()# />
     <cfinvoke method="after" argumentcollection="#attributes#" />
   </cfcase>
 </cfswitch>
