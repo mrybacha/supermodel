@@ -68,6 +68,14 @@
   <!--- Add some default thistag.attributes if they aren't provided as arguments --->
   <cfset thistag.attributes.set("id", arguments.id) /> <!--- ID MUST be the id name --->
   <cfset thistag.attributes.add("name", arguments.id) />
+
+  <cfset _id = attributes.id />
+  <cfif not structkeyexists(request.data_object, _id)>
+    <cfset value = "" />
+  <cfelse>
+    <cfset value = request.data_object[_id] />
+  </cfif>
+  <cfparam name="attributes.class" default="" />
 </cffunction>
 
 <!---------------------------------------------------------------------------------------------- after

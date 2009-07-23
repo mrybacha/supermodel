@@ -1,5 +1,3 @@
-<cfparam name="attributes.class" default="" />
-
 <cfoutput>
 
 <cfswitch expression="#thistag.executionmode#">
