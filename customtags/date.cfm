@@ -1,9 +1,8 @@
-<cfparam name="attributes.style" default="" />
-
 <cfoutput>
 
 <cfswitch expression="#thistag.executionmode#">
   <cfcase value="start">
+
     <cfinclude template="common.cfm" />
     <cfinvoke method="before" argumentcollection="#attributes#" />
 
@@ -15,6 +14,7 @@
       <img src="#request.path#images/calendar.gif" />
     </div>
 
+    <cfinvoke method="after" argumentcollection="#attributes#" />
   </cfcase>
 </cfswitch>
 
