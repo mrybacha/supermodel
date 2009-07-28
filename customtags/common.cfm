@@ -76,6 +76,7 @@
     <cfset value = request.data_object[_id] />
   </cfif>
   <cfparam name="attributes.class" default="" />
+  <cfparam name="attributes.style" default="" />
 </cffunction>
 
 <!---------------------------------------------------------------------------------------------- after
