@@ -1,5 +1,7 @@
 <cfoutput>
 
+<cfset dt = request.data_object[attributes.id] />
+
 <cfswitch expression="#thistag.executionmode#">
   <cfcase value="start">
 
@@ -7,7 +9,8 @@
     <cfinvoke method="before" argumentcollection="#attributes#" />
 
     <div class="datetime #attributes.class#" id="#attributes.id#_wrapper">
-      <input id="#attributes.id#" name="#attributes.id#" type="hidden" value="#lsDateFormat(request.data_object[attributes.id], 'yyyy-mm-dd')#" />
+      <input id="#attributes.id#" name="#attributes.id#" type="hidden"
+        value="#lsDateFormat(dt, 'yyyy-mm-dd')# #lsTimeFormat(dt, 'HH:mm')#" />
       <input id="#attributes.id#_dd" class="day" type="text" maxlength="2" />
       <input id="#attributes.id#_mm" class="month" type="text" maxlength="2" />
       <input id="#attributes.id#_yyyy" class="year" type="text" maxlength="4" />
