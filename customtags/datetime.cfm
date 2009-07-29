@@ -1,18 +1,18 @@
 <cfoutput>
 
+<cfset dt = '' />
+
 <cfswitch expression="#thistag.executionmode#">
   <cfcase value="start">
     <cfinclude template="common.cfm" />
     <cfinvoke method="before" argumentcollection="#attributes#" />
-    <div class="datetime #attributes.class#" id="#attributes.id#_wrapper">
-      <input id="#attributes.id#" name="#attributes.id#" type="hidden"
-        value="#lsDateFormat(value, 'yyyy-mm-dd')# #lsTimeFormat(value, 'HH:mm')#" />
-      <input id="#attributes.id#_dd" class="day" type="text" maxlength="2" />
-      <input id="#attributes.id#_mm" class="month" type="text" maxlength="2" />
-      <input id="#attributes.id#_yyyy" class="year" type="text" maxlength="4" />
-      <img src="#request.path#images/calendar.gif" id="img" />
-      <input id="#attributes.id#_hh" class="hour" type="text" maxlength="2" />
-      <input id="#attributes.id#_mm" class="minute" type="text" maxlength="2" />
+    <cfif value neq ''>
+      <cfset dt = lsDateFormat(value, 'yyyy-mm-dd') & ' ' & lsTimeFormat(value, 'HH:mm') />
+    </cfif>
+    <div id="#attributes.id#_wrapper" class="datetime #attributes.class#">
+      <input id="#attributes.id#" name="#attributes.id#" type="hidden" value="#dt#" />
+      <cf_date id="#attributes.id#_date" label="" style="float:left;">
+      <cf_time id="#attributes.id#_time" label="">
     </div>
     <cfinvoke method="after" argumentcollection="#attributes#" />
   </cfcase>
