@@ -786,6 +786,9 @@
 			<cfcase value="decimal">
 				<cfreturn "cf_sql_decimal" />
 			</cfcase>
+      <cfcase value="float">
+        <cfreturn "cf_sql_float" />
+      </cfcase>
 			<cfcase value="double">
 				<cfreturn "cf_sql_double" />
 			</cfcase>
