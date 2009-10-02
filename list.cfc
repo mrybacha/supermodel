@@ -112,8 +112,25 @@
 
 ---------------------------------------------------------------------------------------------->
 
-  <cffunction name="isEmpty" access="public" returntype="numeric" output="false">
+  <cffunction name="isEmpty" access="public" returntype="boolean" output="false">
     <cfreturn variables.length eq 0 />
+  </cffunction>
+
+<!------------------------------------------------------------------------------------- append 
+
+  Description:
+
+---------------------------------------------------------------------------------------------->
+
+  <cffunction name="append" access="public" returntype="list" output="false">
+    <cfargument name="object" type="model" required="yes" />
+
+    <cfset queryAddRow(variables.query) />
+    <cfloop list="#variables.query.columnlist#" index="column">
+      <cfset variables.query[column][variables.query.recordcount] = object[column] />
+    </cfloop>
+
+    <cfreturn this>
   </cffunction>
 
 <!---------------------------------------------------------------------------------------- copy
