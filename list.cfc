@@ -130,6 +130,8 @@
       <cfset variables.query[column][variables.query.recordcount] = object[column] />
     </cfloop>
 
+    <cfset variables.length = variables.length + 1 />
+
     <cfreturn this>
   </cffunction>
 
