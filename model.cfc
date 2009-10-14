@@ -377,6 +377,17 @@
 		<cfreturn variables.database_fields />
 	</cffunction>
 
+<!-------------------------------------------------------------------------------------------->
+<!------------------------------------ Utility Functions ------------------------------------->
+<!-------------------------------------------------------------------------------------------->
+
+	<cffunction name="getList" access="public" returntype="list">
+    <cfargument name="query" type="query" required="yes" />
+
+    <cfset var list = createObject('component', 'list')>
+    <cfset list.init(this, query) />
+    <cfreturn list />
+	</cffunction>
 
 <!-------------------------------------------------------------------------------------------->
 <!---------------------------------- Basic Query Functions ----------------------------------->
