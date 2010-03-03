@@ -4,7 +4,7 @@
   <cfcase value="start">
     <cfinclude template="common.cfm" />
     <cfinvoke method="before" argumentcollection="#attributes#" />
-		<select #thistag.attributes.string()#>
+		<select class="select #attributes.class#" #thistag.attributes.string()#>
   </cfcase>
 
   <cfcase value="end">

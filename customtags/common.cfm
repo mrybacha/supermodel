@@ -68,6 +68,13 @@
   <!--- Add some default thistag.attributes if they aren't provided as arguments --->
   <cfset thistag.attributes.set("id", arguments.id) /> <!--- ID MUST be the id name --->
   <cfset thistag.attributes.add("name", arguments.id) />
+
+  <cfset value = "" />
+  <cfif structkeyexists(request.data_object, attributes.id)>
+    <cfset value = request.data_object[attributes.id] />
+  </cfif>
+  <cfparam name="attributes.class" default="" />
+  <cfparam name="attributes.style" default="" />
 </cffunction>
 
 <!---------------------------------------------------------------------------------------------- after
@@ -78,7 +85,12 @@
 
 <cffunction name="after" access="private" returntype="void">
   <cfinvoke method="error" argumentcollection="#arguments#" />
-  <cfif NOT structKeyExists(arguments, 'break') OR arguments.break EQ "yes">
+  <cfset tag = GetBaseTagList() />
+  <cfif (NOT structKeyExists(arguments, 'break') OR arguments.break EQ "yes") AND
+        (ListFindNoCase(tag,'cf_date') eq 0 AND ListFindNoCase(tag,'cf_time') eq 0 AND
+         ListFindNoCase(tag,'cf_datetime') eq 0)>
+        <!--- date and time both have divs surrounding the fields and should not be followed by an 
+        extra linebreak --->
     <br />
   </cfif>
 </cffunction>
