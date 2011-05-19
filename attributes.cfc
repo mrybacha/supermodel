@@ -1,3 +1,4 @@
+<!--- test comment --->
 <cfcomponent name="Attributes">
 	<cfparam name="variables.attributes" default="" />
 	
