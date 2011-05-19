@@ -2,7 +2,6 @@
 <!--- test comment deux --->
 <!--- test comment trois --->
 
-
 <cfcomponent name="Attributes">
 	<cfparam name="variables.attributes" default="" />
 	
