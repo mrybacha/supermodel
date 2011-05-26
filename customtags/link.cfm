@@ -9,7 +9,7 @@
 
 <cfswitch expression="#thistag.executionmode#">
   <cfcase value="start">
-  <cfset reserved_arguments = "href" />
+  <cfset reserved_arguments = "href,root,text,path" />
   <cfobject name="thistag.attributes" component="supermodel2.attributes" />
 
   <cfset thistag.attributes.init(
