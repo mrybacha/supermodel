@@ -167,7 +167,6 @@
 		<cfargument name="id" type="numeric" required="yes" />
 
 		<cfset var query = "" />
-		<cfset var params = StructNew() />
 		<cfset var child_id = "" />
 		<cfset var temp_prefix = '' />
 
@@ -195,7 +194,6 @@
 		<!---
 			Read all the single objects from belongTo relations
 		 --->
-
 		<cfif structKeyExists(variables, 'children')>
 			<cfloop list="#variables.children#" index="object">
 				<cfset child_id = this[this[object].prefix & 'id'] />
@@ -208,7 +206,6 @@
 		<!---
 			Read all the collections from the hasMany relations
 		 --->
-
 		 <cfif structKeyExists(variables, 'collections')>
 		 	<cfloop list="#variables.collections#" index="collection">
 				<cfset this[collection].setQuery(query) />
