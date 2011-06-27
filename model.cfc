@@ -1,5 +1,5 @@
 <!--------------------------------------- model -----------------------------------------------
-TEST
+
 	Description:	Adds CRUD (Create/Read/Update/Delete) methods to the object so that each instance
 								of the object is tied to a single record in the database table.
 
