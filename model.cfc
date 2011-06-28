@@ -167,7 +167,6 @@
 		<cfargument name="id" type="numeric" required="yes" />
 
 		<cfset var query = "" />
-		<cfset var params = StructNew() />
 		<cfset var child_id = "" />
 		<cfset var temp_prefix = '' />
 
@@ -195,7 +194,6 @@
 		<!---
 			Read all the single objects from belongTo relations
 		 --->
-
 		<cfif structKeyExists(variables, 'children')>
 			<cfloop list="#variables.children#" index="object">
 				<cfset child_id = this[this[object].prefix & 'id'] />
@@ -208,7 +206,6 @@
 		<!---
 			Read all the collections from the hasMany relations
 		 --->
-
 		 <cfif structKeyExists(variables, 'collections')>
 		 	<cfloop list="#variables.collections#" index="collection">
 				<cfset this[collection].setQuery(query) />
@@ -374,22 +371,20 @@
 ---------------------------------------------------------------------------------------------->
 
 	<cffunction name="getArgs" access="public" returntype="struct">
-
-		<cfset var struct = structNew() />
-
-		<cfloop list="#variables.database_fields#" index="field">
-			<cfset structInsert(struct,field,structFind(this,field),true)/>
-		</cfloop>
-
-		<cfif structKeyExists(variables,'custom_fields')>
-			<cfloop list="#variables.custom_fields#" index="field">
-				<cfset structInsert(struct,field,structFind(this,field),true)/>
-			</cfloop>
-		</cfif>
-
-		<cfreturn struct />
+		<cfreturn variables.database_fields />
 	</cffunction>
 
+<!-------------------------------------------------------------------------------------------->
+<!------------------------------------ Utility Functions ------------------------------------->
+<!-------------------------------------------------------------------------------------------->
+
+	<cffunction name="getList" access="public" returntype="list">
+    <cfargument name="query" type="query" required="yes" />
+
+    <cfset var list = createObject('component', 'list')>
+    <cfset list.init(this, query) />
+    <cfreturn list />
+	</cffunction>
 
 <!-------------------------------------------------------------------------------------------->
 <!---------------------------------- Basic Query Functions ----------------------------------->
@@ -507,27 +502,29 @@
       <!--- If no table was specified, insert into the rest of the tables using the
             same key --->
       <cfset rest_tables = ListRest(variables.tables) />
+      <cfif listLen(rest_tables) gt 0>
 
-      <cfquery name="query" datasource="#variables.dsn#">
-        <cfloop list="#rest_tables#" index="table_name">
-          <cfset cols = StructFind(props, table_name) />
-          <cfset delimiter = "" />
-          SET nocount ON
-          INSERT INTO #table_name# (id <cfif cols neq "">, #cols#</cfif>)
-          VALUES (
-            <cfqueryparam
-              value="#primary_query.id#"
-              cfsqltype="cf_sql_integer" />
-            <cfloop list="#cols#" index="field_name">
-              , <cfqueryparam
-                value="#value(field_name)#"
-                null="#null(field_name)#"
-                cfsqltype="#type(field_name)#" />
-            </cfloop>
-          )
-          SET nocount OFF
-        </cfloop>
-      </cfquery>
+       <cfquery name="query" datasource="#variables.dsn#">
+         <cfloop list="#rest_tables#" index="table_name">
+           <cfset cols = StructFind(props, table_name) />
+           <cfset delimiter = "" />
+           SET nocount ON
+           INSERT INTO #table_name# (id <cfif cols neq "">, #cols#</cfif>)
+           VALUES (
+             <cfqueryparam
+               value="#primary_query.id#"
+               cfsqltype="cf_sql_integer" />
+             <cfloop list="#cols#" index="field_name">
+               , <cfqueryparam
+                 value="#value(field_name)#"
+                 null="#null(field_name)#"
+                 cfsqltype="#type(field_name)#" />
+             </cfloop>
+           )
+           SET nocount OFF
+         </cfloop>
+       </cfquery>
+      </cfif>
     </cfif>
 
     <cfset this.id = primary_query.id />
@@ -585,10 +582,10 @@
 
 		<cfquery datasource="#variables.dsn#">
 		  <cfloop list="#arguments.tables#" index="table_name">	
-        DELETE FROM #table#
+        DELETE FROM #table_name#
 		 	  WHERE #arguments.primary_key# = '#Evaluate("this.#arguments.primary_key#")#'
 		  </cfloop>
-    </cfquery>either i put back the list thing, or i separate the 
+    </cfquery><!---either i put back the list thing, or i separate the --->
 	</cffunction>
 
 <!-------------------------------------------------------------------------------------------->
@@ -643,21 +640,21 @@
     <cfparam name="variables.tables" default="" />
    
     <!--- Record the table_name if it's not in there already --->
-    <cfif not ListContains(variables.tables, variables.table_name)>
+    <cfif not listFindNoCase(variables.tables, variables.table_name, ',')>
       <cfset variables.tables = ListAppend(variables.tables, variables.table_name) />
     </cfif>
 
     <!--- Insert the property into the fields struct according to what table
           it belongs to --->
     <!--- remove 'id' field --->
-    <cfset REReplaceNoCase(arguments.persisted_fields, '(?=,)id(?=,)', '', 'all') />
+    <cfset args = REReplaceNoCase(arguments.persisted_fields, '\bid\b', '', 'all') />
     <cfif StructKeyExists(variables.database_fields, variables.table_name)>
       <cfset list = StructFind(variables.database_fields, variables.table_name) />
     <cfelse>
       <cfset list = "" />
     </cfif>
 
-    <cfset list = ListAppend(list, arguments.persisted_fields) />
+    <cfset list = ListAppend(list, args) />
 
     <!--- Remove duplicates --->
     <cfset temp_struct = StructNew() />
